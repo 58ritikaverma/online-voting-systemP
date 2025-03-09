@@ -184,7 +184,7 @@
           data.append("user_img", user_img);
           try {
             const response = await axios.post(
-              "http://localhost:9001/api/v1/user/register",
+              "http://localhost:5000/api/v1/user/register",
               data
             );
             if (response.data.status) {
