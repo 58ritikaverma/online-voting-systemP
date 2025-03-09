@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Boxicons -->
+    <link
+      href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!-- My CSS -->
+	<link rel="stylesheet" href="./css/chatbot.css" />
+    <link rel="stylesheet" href="./css/dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.2.1/css/all.css"
+    />
+
+    <title>Online Voting</title>
+  </head>
+
+  <body>
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+      <a href="#" class="brand">
+        <i class="bx bxs-smile"></i>
+        <span class="text">Voting</span>
+      </a>
+      <ul class="side-menu top">
+        <li>
+          <a href="./dashboard.html">
+            <i class="bx bxs-dashboard"></i>
+            <span class="text">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="./election.html">
+            <i class="bx bxs-book-add"></i>
+            <span class="text">Add Election</span>
+          </a>
+        </li>
+        <li>
+          <a href="./candidate.html">
+            <i class="bx bxs-user-plus"></i>
+            <span class="text">Add Candidate</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="./voters.html">
+            <i class="bx bxs-group"></i>
+            <span class="text">View Voters</span>
+          </a>
+        </li>
+        <li>
+          <a href="./results.html">
+            <i class="bx bxs-bell"></i>
+            <span class="text">View Results</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="side-menu">
+        <!-- <li>
+				<a href="#">
+					<i class='bx bxs-cog' ></i>
+					<span class="text">Settings</span>
+				</a>
+			</li> -->
+        <li onclick="handleLogOut()">
+          <a href="#" class="logout">
+            <i class="bx bxs-log-out-circle"></i>
+            <span class="text">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+    <!-- CONTENT -->
+    <section id="content">
+      <!-- NAVBAR -->
+      <nav>
+        <i class="bx bx-menu"></i>
+        <form action="#"></form>
+        <p id="nav-name"></p>
+        <a href="#" class="profile">
+          <img src="./img/user.png" />
+        </a>
+      </nav>
+      <!-- NAVBAR -->
+
+      <!-- MAIN -->
+      <main>
+        <div class="head-title">
+          <div class="left">
+            <h1>Dashboard</h1>
+            <ul class="breadcrumb">
+              <li>
+                <a href="#">Dashboard</a>
+              </li>
+              <li><i class="bx bx-chevron-right"></i></li>
+              <li>
+                <a class="active" href="#">Voters</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="select-menu">
+            <div class="select-btn">
+              <span class="sBtn-text">Select Status</span>
+              <i class="bx bx-chevron-down"></i>
+            </div>
+
+            <ul class="options">
+              <li onclick="getVoters('Approved')" class="option">
+                <span class="option-text">Approved</span>
+              </li>
+              <li onclick="getVoters('Pending')" class="option">
+                <span class="option-text">Pending</span>
+              </li>
+              <li onclick="getVoters('Reject')" class="option">
+                <span class="option-text">Rejected</span>
+              </li>
+            </ul>
+            <script>
+              const optionMenu = document.querySelector(".select-menu"),
+                selectBtn = optionMenu.querySelector(".select-btn"),
+                options = optionMenu.querySelectorAll(".option"),
+                sBtn_text = optionMenu.querySelector(".sBtn-text");
+
+              selectBtn.addEventListener("click", () =>
+                optionMenu.classList.toggle("active")
+              );
+
+              options.forEach((option) => {
+                option.addEventListener("click", () => {
+                  let selectedOption =
+                    option.querySelector(".option-text").innerText;
+                  sBtn_text.innerText = selectedOption;
+
+                  optionMenu.classList.remove("active");
+                });
+              });
+            </script>
+          </div>
+        </div>
+
+        <div class="table-data">
+          <div class="order filter-voters-perant">
+            <div class="head">
+              <h3>Voters</h3>
+              <!-- <i class='bx bx-filter-alt filter-voters-icon' ></i>
+                        <div class="filter-voters">
+                            <p onclick="getVoters(true)"><i class='bx bx-chevrons-right' ></i>Approved</p>
+                            <p onclick="getVoters(false)"><i class='bx bx-chevrons-right' ></i>Pending</p>
+                        </div> -->
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Voter</th>
+                  <th>Adhar Number</th>
+                  <th>DOB</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="voter-data"></tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+      <!-- MAIN -->
+    </section>
+    <!-- CONTENT -->
+
+    <div id="popup-div"></div>
+    <script>
+      function tooglePopup() {
+        document.getElementById("popup-1").classList.toggle("active");
+      }
+    </script>
+
+    <!-- Loader -->
+    <div id="center-loading-animation-div" class="center-loading-animation-div">
+      <div class="overlay"></div>
+      <div class="center-loading-animation">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+      </div>
+    </div>
+    <!-- Loader -->
+
+    <!-- CHAT BAR BLOCK -->
+    <div class="chat-bar-collapsible">
+      <button id="chat-button" type="button" class="collapsible">
+        Chat bot!
+        <i
+          id="chat-icon"
+          style="color: #fff"
+          class="fa fa-fw fa-comments-o"
+        ></i>
+      </button>
+      <div class="content">
+        <div class="full-chat-block">
+          <!-- Message Container -->
+          <div class="outer-container">
+            <div class="chat-container">
+              <!-- Messages -->
+              <div id="chatbox">
+                <h5 id="chat-timestamp"></h5>
+                <p id="botStarterMessage" class="botText">
+                  <span>Loading...</span>
+                </p>
+              </div>
+              <!-- User input box -->
+              <div class="chat-bar-input-block">
+                <div id="userInput">
+                  <input
+                    id="textInput"
+                    class="input-box"
+                    type="text"
+                    name="msg"
+                    placeholder="Enter the query"
+                  />
+                  <p></p>
+                </div>
+                <div class="chat-bar-icons">
+                  <i
+                    id="chat-icon"
+                    style="color: #333"
+                    class="fa fa-fw fa-send"
+                    onclick="sendButton()"
+                  ></i>
+                </div>
+              </div>
+              <div id="chat-bar-bottom">
+                <p></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="./js/responses.js"></script>
+    <script src="./js/chat.js"></script>
+
+    <script src="./js/dashboard.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const user = JSON.parse(localStorage.getItem("user"));
+      const admin = JSON.parse(localStorage.getItem("admin"));
+      const token = JSON.parse(localStorage.getItem("auth-token"));
+
+      document.getElementById("nav-name").innerText = user.user_name;
+
+      const loader = document.getElementById("center-loading-animation-div");
+
+      async function getVoters(approved_list = "Pending") {
+        loader.classList.add("active");
+        const voter_data = document.getElementById("voter-data");
+        let html = ``;
+        try {
+          const response = await axios.post(
+            "http://localhost:5000/api/v1/admin/user-list",
+            { approved_list },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+              },
+            }
+          );
+          if (response?.data?.status) {
+            response.data.list.forEach((element) => {
+              html += `<tr>
+								<td>
+									<img src="${element.user_img ? 'http://localhost:5000'+ element.user_img : './img/user.png'}">
+									<p>${element.user_name}</p>
+								</td>
+								<td>${element.adhar_no}</td>
+								<td>${
+                  new Date(element.date_of_birth).getDate() +
+                  "/" +
+                  new Date(element.date_of_birth).getMonth() +
+                  "/" +
+                  new Date(element.date_of_birth).getFullYear()
+                }</td>
+								${
+                  element.verified
+                    ? `<td><span class="status completed btn green">Approved</span><button id="${element._id}" onclick="handleVerifyUser(this.id,false,'Reject')" class="status pending btn green">Reject</button></td>`
+                    : element.status == "Reject"
+                    ? `<td><span class="status pending btn green">Rejected</span><button id="${element._id}" onclick="handleVerifyUser(this.id,true,'Approved')" class="status completed btn">Approve</button></td>`
+                    : `<td><button id="${element._id}" onclick="handleVerifyUser(this.id,false,'Reject')" class="status pending btn green">Reject</button> <button id="${element._id}" onclick="handleVerifyUser(this.id,true,'Approved')" class="status completed btn">Approve</button></td>`
+                }
+							</tr>`;
+            });
+            voter_data.innerHTML = html;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        loader.classList.remove("active");
+      }
+      getVoters();
+
+      async function handleVerifyUser(user_id, verified, status) {
+        const popup = document.getElementById("popup-div");
+        try {
+          const response = await axios.put(
+            "http://localhost:5000/api/v1/admin/verify-user",
+            { user_id, verified, status },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+              },
+            }
+          );
+          if (response?.data?.status) {
+            popup.innerHTML = `<div class="popup active" id="popup-1">
+						<div class="overlay"></div>
+						<div class="content">
+							<div class="close-btn" onclick="tooglePopup()">&times;</div>
+							<h1>Success</h1>
+							<p>User Status update successfully</p>
+						</div>
+						</div>`;
+            setTimeout(() => {
+              window.location.reload();
+            }, 4000);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    </script>
+  </body>
+</html>

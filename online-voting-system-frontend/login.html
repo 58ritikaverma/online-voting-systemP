@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+
+    <!-- link awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.2.1/css/all.css"
+    />
+
+    <!-- Link file CSS -->
+    <link rel="stylesheet" href="./css/chatbot.css" />
+    <link rel="stylesheet" href="./css/login.css" />
+  </head>
+  <body>
+    <div class="contanier">
+      <div class="text login">
+        <img src="./img/1.png" alt="" />
+        <h1>Online Voting</h1>
+        <p>An online voting system uses digital technology to allow citizens to remotely cast their votes, potentially increasing accessibility and efficiency in the voting process.</p>
+      </div>
+
+      <div class="box-login login">
+        <div class="login">
+          <div class="header">
+            <img src="./img/logo.png" alt="" class="logo" />
+            <h2>Hello ! Welcome Back</h2>
+          </div>
+
+          <form>
+            <label for="adhar_no">Adhar Number</label>
+            <div class="inp">
+                <i class="fas fa-user"></i>
+                <input id="login-adhar" type="text" placeholder="Aadhar card number" />
+            </div>
+
+            <label for="password">Password</label>
+            <div class="inp">
+                <i class="fas fa-lock"></i>
+                <input id="login-password" type="password" placeholder="Password" />
+            </div>
+
+            <button type="button" onclick="handleLogin()" >Login</button>
+          </form>
+
+          <p class="creat-ac">
+            Don't Have an account? <a href="./register.html">Create Account</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="popup-div"></div>
+    <script>
+      function tooglePopup() {
+        document.getElementById("popup-1").classList.toggle("active");
+      }
+    </script>
+
+    <!-- Loader -->
+    <div id="center-loading-animation-div" class="center-loading-animation-div">
+      <div class="overlay"></div>
+      <div class="center-loading-animation">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+      </div>
+    </div>
+    <!-- Loader -->
+
+
+    <!-- CHAT BAR BLOCK -->
+    <div class="chat-bar-collapsible">
+      <button id="chat-button" type="button" class="collapsible">
+        Chat bot!
+        <i
+          id="chat-icon"
+          style="color: #fff"
+          class="fa fa-fw fa-comments-o"
+        ></i>
+      </button>
+      <div class="content">
+        <div class="full-chat-block">
+          <!-- Message Container -->
+          <div class="outer-container">
+            <div class="chat-container">
+              <!-- Messages -->
+              <div id="chatbox">
+                <h5 id="chat-timestamp"></h5>
+                <p id="botStarterMessage" class="botText">
+                  <span>Loading...</span>
+                </p>
+              </div>
+              <!-- User input box -->
+              <div class="chat-bar-input-block">
+                <div id="userInput">
+                  <input
+                    id="textInput"
+                    class="input-box"
+                    type="text"
+                    name="msg"
+                    placeholder="Enter the query"
+                  />
+                  <p></p>
+                </div>
+                <div class="chat-bar-icons">
+                  <i
+                    id="chat-icon"
+                    style="color: #333"
+                    class="fa fa-fw fa-send"
+                    onclick="sendButton()"
+                  ></i>
+                </div>
+              </div>
+              <div id="chat-bar-bottom">
+                <p></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="./js/responses.js"></script>
+    <script src="./js/chat.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const loader = document.getElementById("center-loading-animation-div");
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      const admin = JSON.parse(localStorage.getItem("admin"));
+      const token = JSON.parse(localStorage.getItem("auth-token"));
+      if (!user || !token) {
+        localStorage.clear();
+      } else {
+        if (admin) {
+          window.location = "./dashboard.html";
+        } else {
+          window.location = "./user.html";
+        }
+      }
+
+      const handleLogin = async () => {
+        loader.classList.add("active");
+        const adhar_no = document.getElementById("login-adhar").value;
+        const password = document.getElementById("login-password").value;
+        const popup = document.getElementById("popup-div");
+        try {
+          const response = await axios.post(
+            "http://localhost:9001/api/v1/user/login",
+            {
+              adhar_no,
+              password,
+            }
+          );
+          if (response?.data?.success) {
+            localStorage.setItem(
+              "auth-token",
+              JSON.stringify(response.data.authtoken)
+            );
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            if (response?.data?.admin) {
+              localStorage.setItem("admin", true);
+              window.location = "./dashboard.html";
+            } else {
+              localStorage.setItem("admin", false);
+              window.location = "./user.html";
+            }
+            loader.classList.remove("active");
+          } else {
+            loader.classList.remove("active");
+            popup.innerHTML = `<div class="popup active" id="popup-1">
+            <div class="overlay"></div>
+            <div style="max-height:150px;" class="content">
+              <div class="close-btn" onclick="tooglePopup()">&times;</div>
+              <h1>Login Error</h1>
+              <p class="mt-20">${response.data.msg}</p>
+              </div>
+              </div>`;
+          }
+        } catch (error) {
+          loader.classList.remove("active");
+          popup.innerHTML = `<div class="popup active" id="popup-1">
+      <div class="overlay"></div>
+      <div style="max-height:150px;" class="content">
+        <div class="close-btn" onclick="tooglePopup()">&times;</div>
+        <h1>Login Error</h1>
+        <p class="mt-20">Please try to login with correct credentials</p>
+      </div>
+    </div>`;
+        }
+      };
+    </script>
+  </body>
+</html>

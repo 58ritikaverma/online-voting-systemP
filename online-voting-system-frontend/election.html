@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Boxicons -->
+    <link
+      href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!-- My CSS -->
+    <link rel="stylesheet" href="./css/dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.2.1/css/all.css"
+    />
+    <link
+      rel="stylesheet"
+      data-purpose="Layout StyleSheet"
+      title="Default"
+disabled
+      href="/css/app-af6a05f42b013986b481566363f0186f.css?vsn=d"
+    >
+    <link
+      rel="stylesheet"
+      data-purpose="Layout StyleSheet"
+      title="Web Awesome"
+
+      href="/css/app-wa-cc491567b46eab1188c6538ebc462e7d.css?vsn=d"
+    >
+
+      <link
+        rel="stylesheet"
+
+        href="https://site-assets.fontawesome.com/releases/v6.4.0/css/all.css"
+      >
+
+      <link
+        rel="stylesheet"
+
+        href="https://site-assets.fontawesome.com/releases/v6.4.0/css/sharp-solid.css"
+      >
+
+      <link
+        rel="stylesheet"
+
+        href="https://site-assets.fontawesome.com/releases/v6.4.0/css/sharp-regular.css"
+      >
+
+      <link
+        rel="stylesheet"
+
+        href="https://site-assets.fontawesome.com/releases/v6.4.0/css/sharp-light.css"
+      >
+
+    <title>Online Voting</title>
+  </head>
+
+  <body>
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+      <a href="#" class="brand">
+        <i class="bx bxs-smile"></i>
+        <span class="text">Voting</span>
+      </a>
+      <ul class="side-menu top">
+        <li>
+          <a href="./dashboard.html">
+            <i class="bx bxs-dashboard"></i>
+            <span class="text">Dashboard</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="./election.html">
+            <i class="bx bxs-book-add"></i>
+            <span class="text">Add Election</span>
+          </a>
+        </li>
+        <li>
+          <a href="./candidate.html">
+            <i class="bx bxs-user-plus"></i>
+            <span class="text">Add Candidate</span>
+          </a>
+        </li>
+        <li>
+          <a href="./voters.html">
+            <i class="bx bxs-group"></i>
+            <span class="text">View Voters</span>
+          </a>
+        </li>
+        <li>
+          <a href="./results.html">
+            <i class="bx bxs-bell"></i>
+            <span class="text">View Results</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="side-menu">
+        <!-- <li>
+				<a href="#">
+					<i class='bx bxs-cog' ></i>
+					<span class="text">Settings</span>
+				</a>
+			</li> -->
+        <li onclick="handleLogOut()">
+          <a href="#" class="logout">
+            <i class="bx bxs-log-out-circle"></i>
+            <span class="text">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+    <!-- CONTENT -->
+    <section id="content">
+      <!-- NAVBAR -->
+      <nav>
+        <i class="bx bx-menu"></i>
+        <form action="#"></form>
+        <p id="nav-name"></p>
+        <a href="#" class="profile">
+          <img src="./img/user.png" />
+        </a>
+      </nav>
+      <!-- NAVBAR -->
+
+      <!-- MAIN -->
+      <main>
+        <div class="head-title">
+          <div class="left">
+            <h1>Dashboard</h1>
+            <ul class="breadcrumb">
+              <li>
+                <a href="#">Dashboard</a>
+              </li>
+              <li><i class="bx bx-chevron-right"></i></li>
+              <li>
+                <a class="active" href="#">Election</a>
+              </li>
+            </ul>
+          </div>
+          <!-- <a href="#" class="btn-download">
+					<i class='bx bxs-cloud-download' ></i>
+					<span class="text">Download PDF</span>
+				</a> -->
+        </div>
+
+        <div class="table-data">
+          <div class="todo">
+            <div class="head">
+              <h3>Create Election</h3>
+            </div>
+
+            <section class="container">
+              <form class="form">
+                <div class="input-box">
+                  <label>Election Name</label>
+                  <input
+                    id="election-name"
+                    type="text"
+                    placeholder="Enter election name"
+                    required
+                  />
+                </div>
+
+                <div class="column">
+                  <div class="input-box">
+                    <label>Election Date</label>
+                    <input
+                      id="election-date"
+                      type="date"
+                      placeholder="Enter election date"
+                      required
+                    />
+                  </div>
+
+                  <div class="input-box">
+                    <label>No of Candidate</label>
+                    <input
+                      id="election-candidate"
+                      type="number"
+                      placeholder="Enter number of candidate"
+                      required
+                    />
+                  </div>
+                </div>
+                <div id="togel-btn">
+                  <button type="button" onclick="handleCreateElection()">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </section>
+          </div>
+          <div class="todo">
+            <div class="head">
+              <h3>Elections</h3>
+            </div>
+            <ul class="todo-list" id="election-list"></ul>
+          </div>
+        </div>
+      </main>
+      <!-- MAIN -->
+    </section>
+    <!-- CONTENT -->
+    <div id="popup-div"></div>
+    <script>
+      function tooglePopup() {
+        document.getElementById("popup-1").classList.toggle("active");
+      }
+    </script>
+
+    <!-- Loader -->
+    <div id="center-loading-animation-div" class="center-loading-animation-div">
+      <div class="overlay"></div>
+      <div class="center-loading-animation">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+      </div>
+    </div>
+    <!-- Loader -->
+
+    <div id="popup-div"></div>
+    <script>
+      function tooglePopup() {
+        document.getElementById("popup-1").classList.toggle("active");
+      }
+    </script>
+
+    <!-- CHAT BAR BLOCK -->
+    <div class="chat-bar-collapsible">
+      <button id="chat-button" type="button" class="collapsible">
+        Chat bot!
+        <i
+          id="chat-icon"
+          style="color: #fff"
+          class="fa fa-fw fa-comments-o"
+        ></i>
+      </button>
+      <div class="content">
+        <div class="full-chat-block">
+          <!-- Message Container -->
+          <div class="outer-container">
+            <div class="chat-container">
+              <!-- Messages -->
+              <div id="chatbox">
+                <h5 id="chat-timestamp"></h5>
+                <p id="botStarterMessage" class="botText">
+                  <span>Loading...</span>
+                </p>
+              </div>
+              <!-- User input box -->
+              <div class="chat-bar-input-block">
+                <div id="userInput">
+                  <input
+                    id="textInput"
+                    class="input-box"
+                    type="text"
+                    name="msg"
+                    placeholder="Enter the query"
+                  />
+                  <p></p>
+                </div>
+                <div class="chat-bar-icons">
+                  <i
+                    id="chat-icon"
+                    style="color: #333"
+                    class="fa fa-fw fa-send"
+                    onclick="sendButton()"
+                  ></i>
+                </div>
+              </div>
+              <div id="chat-bar-bottom">
+                <p></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="./js/responses.js"></script>
+    <script src="./js/chat.js"></script>
+
+    <script>
+      function handleElectionDetails(electionName, electionDate, candidate) {
+        const popup = document.getElementById("popup-div");
+        popup.innerHTML = `<div class="popup active" id="popup-1">
+            <div class="overlay"></div>
+            <div class="content">
+              <div class="close-btn" onclick="tooglePopup()">&times;</div>
+              <h1>Election Data</h1>
+              <p class="mt-20">Election Name : ${electionName}</p>
+              <p class="mt-20">Election Date : ${electionDate}</p>
+              <p class="mt-20">No of Candidate : ${candidate}</p>
+              </div>
+              </div>`;
+      }
+    </script>
+
+    <script>
+      let date = new Date().getDate();
+      let month = new Date().getMonth() + 1;
+      let year = new Date().getFullYear();
+      if (month < 9) {
+        month = "0" + month;
+      }
+      if (date < 9) {
+        date = "0" + date;
+      }
+      document.getElementById("election-date").min =
+        year + "-" + month + "-" + date;
+    </script>
+
+    <script>
+      function handleEditDataFill(
+        electionName,
+        electionDate,
+        electionCandidate,
+        _id
+      ) {
+        let name = document.getElementById("election-name");
+        let date = document.getElementById("election-date");
+        let candidate = document.getElementById("election-candidate");
+        let btn = document.getElementById("togel-btn");
+        name.value = electionName;
+        date.value = electionDate;
+        candidate.value = electionCandidate;
+        btn.innerHTML = `<button type="button" onclick="handleEditElection('${_id}')">
+					  Edit
+					</button>`;
+      }
+
+
+
+    </script>
+    <script src="./js/dashboard.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const user = JSON.parse(localStorage.getItem("user"));
+      const admin = JSON.parse(localStorage.getItem("admin"));
+      const token = JSON.parse(localStorage.getItem("auth-token"));
+      const popup = document.getElementById("popup-div");
+
+      const loader = document.getElementById("center-loading-animation-div");
+
+      document.getElementById("nav-name").innerText = user.user_name;
+      async function getElectionList() {
+        loader.classList.add("active");
+        const election_list = document.getElementById("election-list");
+        let html = ``;
+        try {
+          const response = await axios.get(
+            "http://localhost:5000/api/v1/admin/all-elections",
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+              },
+            }
+          );
+          if (response?.data?.status) {
+            response.data.elections.forEach((element) => {
+              html += `<li class="completed">
+							<p style="display:flex;justify-content:space-between;align-items: center;width: 100%;"><span onclick="handleElectionDetails('${element.election_name}','${element.election_date}','${element.no_of_candidate}')" style="width:70%;">${element.election_name}</span> <p style="display: flex;justify-content: space-between;width: 13%;"><i onclick="handleEditDataFill('${element.election_name}','${element.election_date}','${element.no_of_candidate}','${element._id}')" class="fa-solid fa-pen-to-square"></i><i onclick="handleDeleteElection('${element._id}')" class="fa-sharp fa-solid fa-trash"></i></p></p>
+						</li>`;
+    
+            });
+            election_list.innerHTML = html;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        loader.classList.remove("active");
+      }
+      getElectionList();
+
+      async function handleCreateElection() {
+        const popup = document.getElementById("popup-div");
+        const election_name = document.getElementById("election-name").value;
+        const election_date = document.getElementById("election-date").value;
+        const no_of_candidate =
+          document.getElementById("election-candidate").value;
+        let html = ``;
+        const data = { election_name, election_date, no_of_candidate };
+        try {
+          const response = await axios.post(
+            "http://localhost:5000/api/v1/admin/create-election",
+            data,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+              },
+            }
+          );
+
+          if (response?.data?.status) {
+            document.getElementById("election-name").value = '';
+            document.getElementById("election-date").value = '';
+            document.getElementById("election-candidate").value = '';
+            popup.innerHTML = `<div class="popup active" id="popup-1">
+						<div class="overlay"></div>
+						<div class="content">
+							<div class="close-btn" onclick="tooglePopup()+window.location.reload()">&times;</div>
+							<h1>Success</h1>
+							<p>Successfully Create Election</p>
+						</div>
+						</div>`;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      async function handleEditElection(_id) {
+        let btn = document.getElementById("togel-btn");
+        const popup = document.getElementById("popup-div");
+        const election_name = document.getElementById("election-name").value;
+        const election_date = document.getElementById("election-date").value;
+        const no_of_candidate =
+          document.getElementById("election-candidate").value;
+        let html = ``;
+        const data = { election_name, election_date, no_of_candidate, _id };
+        try {
+          const response = await axios.put(
+            "http://localhost:5000/api/v1/admin/update-election",
+            data,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+              },
+            }
+          );
+
+          if (response?.data?.status) {
+            document.getElementById("election-name").value = '';
+            document.getElementById("election-date").value = '';
+            document.getElementById("election-candidate").value = '';
+            popup.innerHTML = `<div class="popup active" id="popup-1">
+						<div class="overlay"></div>
+						<div class="content">
+							<div class="close-btn" onclick="tooglePopup()+window.location.reload()">&times;</div>
+							<h1>Success</h1>
+							<p>Successfully Update Election</p>
+						</div>
+						</div>`;
+            btn.innerHTML = `<button type="button" onclick="handleCreateElection()">
+					  Submit
+					</button>`;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+
+
+      // Handle Delete Election
+      async function handleDeleteElection(_id){
+        console.log(token)
+        try {
+          const data = {
+            _id
+          }
+          const response = await axios.post(
+              "http://localhost:5000/api/v1/admin/delete-election",
+              data,
+              {
+                headers: {
+                  "auth-token": token,
+                },
+              }
+            );
+
+            if (response?.data?.status) {
+              popup.innerHTML = `<div class="popup active" id="popup-1">
+            <div class="overlay"></div>
+            <div class="content">
+              <div class="close-btn" onclick="tooglePopup()">&times;</div>
+              <h1>Successfully Deleted</h1>
+              <p class="mt-20">Election delete successfully.</p>
+              </div>
+              </div>`;
+              setTimeout(()=>{
+                window.location.reload();
+              },4000)
+            } else {
+              popup.innerHTML = `<div class="popup active" id="popup-1">
+            <div class="overlay"></div>
+            <div class="content">
+              <div class="close-btn" onclick="tooglePopup()">&times;</div>
+              <h1>Error</h1>
+              <p class="mt-20">${response.data.msg}</p>
+              </div>
+              </div>`;
+            }
+        } catch (error) {
+          popup.innerHTML = `<div class="popup active" id="popup-1">
+            <div class="overlay"></div>
+            <div class="content">
+              <div class="close-btn" onclick="tooglePopup()">&times;</div>
+              <h1>Error</h1>
+              <p class="mt-20">${error}</p>
+              </div>
+              </div>`;
+          console.log(error)
+        }
+      }
+    </script>
+  </body>
+</html>

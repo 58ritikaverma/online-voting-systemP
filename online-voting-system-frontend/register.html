@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+
+    <!-- link awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.2.1/css/all.css"
+    />
+
+    <!-- Link file CSS -->
+    <link rel="stylesheet" href="./css/login.css" />
+  </head>
+  <body>
+    <div class="contanier">
+      <div class="text">
+        <img src="./img/1.png" alt="" />
+        <h1>Online Voting</h1>
+        <p>
+          An online voting system uses digital technology to allow citizens to
+          remotely cast their votes, potentially increasing accessibility and
+          efficiency in the voting process.
+        </p>
+      </div>
+
+      <div class="box-login">
+        <div class="login">
+          <div class="header">
+            <img src="./img/logo.png" alt="" class="logo" />
+            <h2>Hello ! Welcome</h2>
+          </div>
+
+          <form>
+            <label>Name</label>
+            <div class="inp">
+              <i class="fas fa-user"></i>
+              <input id="register-name" type="text" placeholder="Name" />
+            </div>
+            <label>Upload your image</label>
+            <div class="inp">
+              <i class="fas fa-user"></i>
+              <input
+                id="user-img"
+                type="file"
+                placeholder="Upload your image"
+                required
+              />
+            </div>
+            <label>Adhar Number</label>
+            <div class="inp">
+              <i class="fas fa-user"></i>
+              <input
+                id="register-adhar"
+                type="text"
+                placeholder="Adhar card number"
+              />
+            </div>
+            <label>DOB</label>
+            <div class="inp">
+              <i class="fa-duotone fa-calendar-days"></i>
+              <input id="register-dob" type="date" placeholder="DOB" />
+            </div>
+            <label>State</label>
+            <div class="inp">
+              <i class="fa-solid fa-location-dot"></i>
+              <input id="register-state" type="text" placeholder="State" />
+            </div>
+            <label>City</label>
+            <div class="inp">
+              <i class="fa-solid fa-location-dot"></i>
+              <input id="register-city" type="text" placeholder="Enter city" />
+            </div>
+            <label>Pincode</label>
+            <div class="inp">
+              <i class="fa-solid fa-location-dot"></i>
+              <input id="register-pincode" type="text" placeholder="Pincode" />
+            </div>
+
+            <label>Password</label>
+            <div class="inp">
+              <i class="fa-solid fa-lock"></i>
+              <input
+                id="register-password"
+                type="password"
+                placeholder="Enter Your Password"
+              />
+            </div>
+            <label>Confirm Password</label>
+            <div class="inp">
+              <i class="fa-solid fa-lock"></i>
+              <input
+                id="register-cpassword"
+                type="password"
+                placeholder="Confirm password"
+              />
+            </div>
+
+            <button type="button" onclick="handleRegister()">Register</button>
+          </form>
+
+          <p class="creat-ac">
+            if you are already register. then login
+            <a href="./login.html">Sign in</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="popup-div"></div>
+    <script>
+      function tooglePopup() {
+        document.getElementById("popup-1").classList.toggle("active");
+      }
+    </script>
+
+    <!-- Loader -->
+    <div id="center-loading-animation-div" class="center-loading-animation-div">
+      <div class="overlay"></div>
+      <div class="center-loading-animation">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+      </div>
+    </div>
+    <!-- Loader -->
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const loader = document.getElementById("center-loading-animation-div");
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      const admin = JSON.parse(localStorage.getItem("admin"));
+      const token = JSON.parse(localStorage.getItem("auth-token"));
+      if (!user || !token) {
+        localStorage.clear();
+      } else {
+        if (admin) {
+          window.location = "./dashboard.html";
+        } else {
+          window.location = "./user.html";
+        }
+      }
+
+      const handleRegister = async () => {
+        loader.classList.add("active");
+        const adhar_no = document.getElementById("register-adhar").value;
+        const user_name = document.getElementById("register-name").value;
+        const date_of_birth = document.getElementById("register-dob").value;
+        const password = document.getElementById("register-password").value;
+        const cpassword = document.getElementById("register-cpassword").value;
+        const state = document.getElementById("register-state").value;
+        const city = document.getElementById("register-city").value;
+        const pincode = document.getElementById("register-pincode").value;
+        const user_img = document.getElementById("user-img").files[0];
+        const popup = document.getElementById("popup-div");
+        if (cpassword === password) {
+          const data = new FormData();
+          data.append("adhar_no", adhar_no);
+          data.append("password", password);
+          data.append("date_of_birth", date_of_birth);
+          data.append("state", state);
+          data.append("user_name", user_name);
+          data.append("city", city);
+          data.append("pincode", pincode);
+          data.append("user_img", user_img);
+          try {
+            const response = await axios.post(
+              "http://localhost:9001/api/v1/user/register",
+              data
+            );
+            if (response.data.status) {
+              loader.classList.remove("active");
+              popup.innerHTML = `<div class="popup active" id="popup-1">
+        <div class="overlay"></div>
+        <div class="content">
+          <div class="close-btn" onclick="tooglePopup()">&times;</div>
+          <h1>Successfully Create Account</h1>
+          <p class="mt-20">Your account create successfully. after verified your account you can login.</p>
+        </div>
+      </div>`;
+
+              document.getElementById("register-adhar").value = "";
+              document.getElementById("register-name").value = "";
+              document.getElementById("register-dob").value = "";
+              document.getElementById("register-state").value = "";
+              document.getElementById("register-password").value = "";
+              document.getElementById("register-cpassword").value = "";
+              document.getElementById("register-city").value = "";
+              document.getElementById("register-pincode").value = "";
+            } else {
+              loader.classList.remove("active");
+              popup.innerHTML = `<div class="popup active" id="popup-1">
+        <div class="overlay"></div>
+        <div class="content">
+          <div class="close-btn" onclick="tooglePopup()">&times;</div>
+          <h1>Register Fail</h1>
+          <p class="mt-20">${response.data.msg}</p>
+        </div>
+      </div>`;
+            }
+          } catch (error) {
+            loader.classList.remove("active");
+            popup.innerHTML = `<div class="popup active" id="popup-1">
+        <div class="overlay"></div>
+        <div class="content">
+          <div class="close-btn" onclick="tooglePopup()">&times;</div>
+          <h1>Invaild Data</h1>
+            <p class="mt-20">
+              ${error.response.data.errors[0].param} : ${error.response.data.errors[0].msg}
+            </p>
+        </div>
+      </div>`;
+          }
+        } else {
+          loader.classList.remove("active");
+          popup.innerHTML = `<div class="popup active" id="popup-1">
+        <div class="overlay"></div>
+        <div class="content">
+          <div class="close-btn" onclick="tooglePopup()">&times;</div>
+          <h1>Password Invaild</h1>
+            <p class="mt-20">
+              Please enter same password in confirm password.
+            </p>
+        </div>
+      </div>`;
+        }
+      };
+    </script>
+  </body>
+</html>

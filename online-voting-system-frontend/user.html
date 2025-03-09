@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Boxicons -->
+    <link
+      href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!-- My CSS -->
+    <link rel="stylesheet" href="./css/dashboard.css" />
+    <link rel="stylesheet" href="./css/chatbot.css" />
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.2.1/css/all.css"
+    />
+
+    <title>Online Voting</title>
+  </head>
+
+  <body>
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+      <a href="#" class="brand">
+        <i class="bx bxs-smile"></i>
+        <span class="text">Voting</span>
+      </a>
+      <ul class="side-menu top">
+        <li class="active">
+          <a href="./dashboard.html">
+            <i class="bx bxs-dashboard"></i>
+            <span class="text">Dashboard</span>
+          </a>
+        </li>
+        <li class="">
+          <a href="./user-result.html">
+            <i class="bx bxs-dashboard"></i>
+            <span class="text">Result</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="side-menu">
+        <!-- <li>
+				<a href="#">
+					<i class='bx bxs-cog' ></i>
+					<span class="text">Settings</span>
+				</a>
+			</li> -->
+        <li onclick="handleLogOut()">
+          <a href="#" class="logout">
+            <i class="bx bxs-log-out-circle"></i>
+            <span class="text">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+    <!-- CONTENT -->
+    <section id="content">
+      <!-- NAVBAR -->
+      <nav>
+        <i class="bx bx-menu"></i>
+        <form action="#"></form>
+        <p id="nav-name"></p>
+        <a href="#" class="profile">
+          <img src="./img/user.png" />
+        </a>
+      </nav>
+      <!-- NAVBAR -->
+
+      <!-- MAIN -->
+      <main>
+        <div class="head-title">
+          <div class="left">
+            <h1>Dashboard</h1>
+            <ul class="breadcrumb">
+              <li>
+                <a href="#">Dashboard</a>
+              </li>
+              <li><i class="bx bx-chevron-right"></i></li>
+              <li>
+                <a class="active" href="#">Home</a>
+              </li>
+            </ul>
+          </div>
+          <div class="select-menu">
+            <div class="select-btn">
+              <span class="sBtn-text">Select Election</span>
+              <i class="bx bx-chevron-down"></i>
+            </div>
+
+            <ul class="options" id="election-list-1"></ul>
+            <script>
+              const optionMenu = document.querySelector(".select-menu"),
+                selectBtn = optionMenu.querySelector(".select-btn"),
+                options = optionMenu.querySelectorAll(".option"),
+                sBtn_text = optionMenu.querySelector(".sBtn-text");
+
+              selectBtn.addEventListener("click", () =>
+                optionMenu.classList.toggle("active")
+              );
+
+              options.forEach((option) => {
+                option.addEventListener("click", () => {
+                  let selectedOption =
+                    option.querySelector(".option-text").innerText;
+                  sBtn_text.innerText = selectedOption;
+
+                  optionMenu.classList.remove("active");
+                });
+              });
+
+              function changeText(text) {
+                sBtn_text.innerText = text;
+                optionMenu.classList.toggle("active");
+              }
+            </script>
+          </div>
+          <!-- <a href="#" class="btn-download">
+					<i class='bx bxs-cloud-download' ></i>
+					<span class="text">Download PDF</span>
+				</a> -->
+        </div>
+
+        <ul class="box-info" id="counting-result">
+          <li>
+            <i class="bx bxs-group"></i>
+            <span class="text">
+              <h3>Name</h3>
+              <p>Party Name</p>
+            </span>
+          </li>
+          <li>
+            <i class="bx bxs-group"></i>
+            <span class="text">
+              <h3>Name</h3>
+              <p>Party Name</p>
+            </span>
+          </li>
+          <li>
+            <i class="bx bxs-group"></i>
+            <span class="text">
+              <h3>Name</h3>
+              <p>Party Name</p>
+            </span>
+          </li>
+        </ul>
+
+        <div class="table-data">
+          <div class="order">
+            <div class="head">
+              <h3>Voting</h3>
+            </div>
+            <table>
+              <thead>
+                <tr id="h-none">
+                  <th>Candidate</th>
+                  <th>Manifesto</th>
+                  <th>Age</th>
+                  <th>Party</th>
+                  <th>Vote</th>
+                </tr>
+              </thead>
+              <tbody id="candidate-data"></tbody>
+            </table>
+            <div id="voted-div" class="voted-div">
+              <img class="voted-tick" alt="" src="./img/tick.webp" />
+              <p>Hello! <span id="user_name"></span>, you are already voted</p>
+              <div id="voted-candidate">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <!-- MAIN -->
+    </section>
+    <!-- CONTENT -->
+
+    <!-- Loader -->
+    <div id="center-loading-animation-div" class="center-loading-animation-div">
+      <div class="overlay"></div>
+      <div class="center-loading-animation">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+      </div>
+    </div>
+    <!-- Loader -->
+
+    <div id="popup-div"></div>
+    <script>
+      function tooglePopup() {
+        document.getElementById("popup-1").classList.toggle("active");
+      }
+    </script>
+
+    <!-- CHAT BAR BLOCK -->
+    <div class="chat-bar-collapsible">
+      <button id="chat-button" type="button" class="collapsible">
+        Chat bot!
+        <i
+          id="chat-icon"
+          style="color: #fff"
+          class="fa fa-fw fa-comments-o"
+        ></i>
+      </button>
+      <div class="content">
+        <div class="full-chat-block">
+          <!-- Message Container -->
+          <div class="outer-container">
+            <div class="chat-container">
+              <!-- Messages -->
+              <div id="chatbox">
+                <h5 id="chat-timestamp"></h5>
+                <p id="botStarterMessage" class="botText">
+                  <span>Loading...</span>
+                </p>
+              </div>
+              <!-- User input box -->
+              <div class="chat-bar-input-block">
+                <div id="userInput">
+                  <input
+                    id="textInput"
+                    class="input-box"
+                    type="text"
+                    name="msg"
+                    placeholder="Enter the query"
+                  />
+                  <p></p>
+                </div>
+                <div class="chat-bar-icons">
+                  <i
+                    id="chat-icon"
+                    style="color: #333"
+                    class="fa fa-fw fa-send"
+                    onclick="sendButton()"
+                  ></i>
+                </div>
+              </div>
+              <div id="chat-bar-bottom">
+                <p></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="./js/responses.js"></script>
+    <script src="./js/chat.js"></script>
+
+    <script src="./js/dashboard.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const user = JSON.parse(localStorage.getItem("user"));
+      const admin = JSON.parse(localStorage.getItem("admin"));
+      const token = JSON.parse(localStorage.getItem("auth-token"));
+      const user_id = user._id;
+
+      document.getElementById("nav-name").innerText = user.user_name;
+
+      const loader = document.getElementById("center-loading-animation-div");
+
+      async function getElectionList() {
+        loader.classList.add("active");
+        const election = document.getElementById("election-list-1");
+        let html = ``;
+        try {
+          const response = await axios.get(
+            "http://localhost:5000/api/v1/admin/all-elections",
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+              },
+            }
+          );
+          if (response?.data?.status) {
+            response.data.elections.forEach((element) => {
+              html += `<li onclick="getVotedStatus(this.id)" class="option" id="${element._id}">
+                            <span onclick="changeText(this.innerText)" class="option-text">${element.election_name}</span>
+                        </li>`;
+            });
+            election.innerHTML = html;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        loader.classList.remove("active");
+      }
+      getElectionList();
+
+      async function giveVote(candidate_id) {
+        loader.classList.add("active");
+        const popup = document.getElementById("popup-div");
+        let html = ``;
+        try {
+          const response = await axios.post(
+            "http://localhost:5000/api/v1/user/vote",
+            { election_id, candidate_id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+              },
+            }
+          );
+          if (response?.data?.status) {
+            popup.innerHTML = `<div class="popup active" id="popup-1">
+      <div class="overlay"></div>
+      <div style="max-height:150px;" class="content">
+        <div class="close-btn" onclick="tooglePopup()">&times;</div>
+        <h1>Success</h1>
+        <p>give vote successfully.</p>
+      </div>
+    </div>`;
+    setTimeout(() => {
+            window.location.reload();
+          }, 4000);
+          } else {
+            popup.innerHTML = `<div class="popup active" id="popup-1">
+      <div class="overlay"></div>
+      <div style="max-height:150px;" class="content">
+        <div class="close-btn" onclick="tooglePopup()">&times;</div>
+        <h1>Election not started.</h1>
+        <p>${response.data.msg}</p>
+      </div>
+    </div>`;
+          }
+          
+        } catch (error) {
+          console.log(error);
+        }
+        loader.classList.remove("active");
+      }
+
+      async function getVotedStatus(election_id) {
+        loader.classList.add("active");
+        const counting_list = document.getElementById("counting-result");
+        const candidateData = document.getElementById("candidate-data");
+        const hNone = document.getElementById("h-none");
+        const votedDiv = document.getElementById("voted-div");
+        const votedCandidate = document.getElementById("voted-candidate");
+        const user_name = document.getElementById("user_name");
+        try {
+          const response = await axios.post(
+            "http://localhost:5000/api/v1/user/vote-status",
+            { election_id, user_id },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+              },
+            }
+          );
+          if (response?.data?.status) {
+            hNone.style.display = "none";
+            votedDiv.style.display = "flex";
+            user_name.innerHTML = `${response?.data?.vote[0].user_name}`;
+            votedCandidate.innerHTML = `
+            <div>Candiade Name : <span>${response?.data?.vote[0].candidate_name}</span>
+            <div>Party Name : <span>${response?.data?.vote[0].party_name}</span>`;
+            counting_list.innerHTML = `<li>
+                    <i class='bx bxs-group'></i>
+                    <span class="text">
+                        <h3>Name</h3>
+                        <p>Party Name</p>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bxs-group'></i>
+                    <span class="text">
+                        <h3>Name</h3>
+                        <p>Party Name</p>
+                    </span>
+                </li><li>
+                    <i class='bx bxs-group'></i>
+                    <span class="text">
+                        <h3>Name</h3>
+                        <p>Party Name</p>
+                    </span>
+                </li>`;
+            candidateData.innerHTML = "";
+          } else {
+            getCandidate(election_id);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        loader.classList.remove("active");
+      }
+
+      async function getCandidate(election_id1) {
+        election_id = election_id1;
+        const counting_list = document.getElementById("counting-result");
+        const candidateData = document.getElementById("candidate-data");
+        const hNone = document.getElementById("h-none");
+        const votedDiv = document.getElementById("voted-div");
+        let html = ``;
+        let html1 = ``;
+        try {
+          const response = await axios.post(
+            "http://localhost:5000/api/v1/user/candidates-details",
+            { election_id: election_id1 },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token": token,
+              },
+            }
+          );
+          if (response?.data?.status) {
+            hNone.style.display = "";
+            votedDiv.style.display = "none";
+            if (response.data.candidate_list.length) {
+              response.data.candidate_list.forEach((element) => {
+                html += `<li>
+								<div class="party-logo">
+									<img src="http://localhost:5000${element.party_logo}" alt="">
+								</div>
+                        <span class="text">
+                            <h3>${element.party_name}</h3>
+                            <p>${element.candidate_name}</p>
+                        </span>
+                    </li>`;
+
+                html1 += `<tr>
+								<td>
+									<div style="display:flex;">
+                                <div class="party-logo-user">
+                                    <img src="http://localhost:5000${element.party_logo}" alt="">
+                                </div>
+                                <div style="margin-left:8px;" class="party-logo-user">
+                                    <img src="http://localhost:5000${element.candidate_img}" alt="">
+                                </div>
+                            </div>
+									<p>${element.candidate_name}</p>
+								</td>
+								<td><a href="http://localhost:5000${element.mainfest}" target="_blank">View</a></td>
+								<td>${element.candidate_age}</td>
+								<td>${element.party_name}</td>
+								<td><button onclick="giveVote(this.id)" id="${element._id}" class="status completed btn">vote</button></td>
+							</tr>`;
+              });
+              counting_list.innerHTML = html;
+              candidateData.innerHTML = html1;
+            } else {
+              html += `<li>
+                    <i class='bx bxs-group'></i>
+                    <span class="text">
+                        <h3>Name</h3>
+                        <p>Party Name</p>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bxs-group'></i>
+                    <span class="text">
+                        <h3>Name</h3>
+                        <p>Party Name</p>
+                    </span>
+                </li><li>
+                    <i class='bx bxs-group'></i>
+                    <span class="text">
+                        <h3>Name</h3>
+                        <p>Party Name</p>
+                    </span>
+                </li>`;
+              counting_list.innerHTML = html;
+              candidateData.innerHTML = "";
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    </script>
+  </body>
+</html>
