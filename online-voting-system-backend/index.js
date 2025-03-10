@@ -4,7 +4,7 @@ const cors = require("cors");
 const path = require('path');
 global.appRoot = path.resolve(__dirname);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 const app = express();
 
 

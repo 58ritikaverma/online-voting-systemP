@@ -258,7 +258,7 @@
         const total_election = document.getElementById("total-election");
         try {
           const response = await axios.get(
-            "http://localhost:5000/api/v1/admin/get-all-stats"
+            "http://localhost:5001/api/v1/admin/get-all-stats"
           );
           if (response?.data?.status) {
             total_candidate.innerText = response.data.total_candidate;
